@@ -20,6 +20,20 @@ void decryptByteSub(byte_t **state) {
   }
 }
 
+void encryptShiftRow(byte_t **state) {
+  arrangeMatrix(state);
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    shiftRight(state + (ROW_LENGTH * i), i);
+  }
+}
+
+void decryptShiftRow(byte_t **state) {
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    shiftLeft(state + (ROW_LENGTH + i), i);
+  }
+  arrangeMatrix(state);
+}
+
 int main() {
   return 0;
 }

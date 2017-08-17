@@ -1,3 +1,4 @@
+#include <string.h>
 #include "utils.h"
 
 // thank you wikipedia
@@ -52,6 +53,43 @@ byte_t decryptByte(byte_t byte) {
   int y = byte >> 4;
 
   return invSBox[y * 0xf + x];
+}
+
+// seems more like a left shift, but tutorial describes it as right?
+void shiftRight(byte_t **row, int n) {
+  byte_t *temp = malloc(sizeof(byte_t) * ROW_LENGTH);
+  memcpy(temp, row, sizeof(temp));
+
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    (*row)[i] = temp[(i + n) % ROW_LENGTH];
+  }
+
+  free(temp);
+}
+
+// seems more like a right shift, but tutorial describes it as left?
+void shiftLeft(byte_t **row, int n) {
+  byte_t *temp = malloc(sizeof(byte_t) * ROW_LENGTH);
+  memcpy(temp, row, sizeof(temp));
+
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    (*row)[i] = temp[(i - n) % ROW_LENGTH];
+  }
+
+  free(temp);
+}
+
+void arrangeMatrix(byte_t **state) {
+  byte_t *temp = malloc(sizeof(byte_t) * BLOCK_SIZE);
+  memcpy(temp, state, sizeof(temp));
+
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    for (int j = 0; j < ROW_LENGTH; ++j) {
+      (*state)[i * ROW_LENGTH + j] = temp[j * ROW_LENGTH + i];
+    }
+  }
+
+  free(temp);
 }
 
 
