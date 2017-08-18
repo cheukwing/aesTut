@@ -94,18 +94,22 @@ byte_t lTable[256] = {
     0x67, 0x4A, 0xED, 0xDE, 0xC5, 0x31, 0xFE, 0x18, 0x0D, 0x63, 0x8C, 0x80, 0xC0, 0xF7, 0x70, 0x07
 };
 
-byte_t encryptByte(byte_t byte) {
-  int x = byte & 0xF;
-  int y = byte >> 4;
+coord_t getCoord(byte_t byte) {
+  coord_t coord = {byte & 0xF, byte >> 4};
+  return coord;
+}
 
-  return sBox[y * 0xF + x];
+byte_t lookupTable(byte_t byte, byte_t table[]) {
+  coord_t coord = getCoord(byte);
+  return table[coord.y * 0xF + coord.x];
+}
+
+byte_t encryptByte(byte_t byte) {
+  return lookupTable(byte, sBox);
 }
 
 byte_t decryptByte(byte_t byte) {
-  int x = byte & 0xF;
-  int y = byte >> 4;
-
-  return invSBox[y * 0xF + x];
+  return lookupTable(byte, invSBox);
 }
 
 // seems more like a left shift, but tutorial describes it as right?
@@ -143,6 +147,25 @@ void arrangeMatrix(byte_t **state) {
   }
 
   free(temp);
+}
+
+byte_t lookupL(byte_t byte) {
+  return lookupTable(byte, lTable);
+}
+
+byte_t lookupE(byte_t byte) {
+  return lookupTable(byte, eTable);
+}
+
+byte_t galoisMultiply(byte_t a, byte_t b) {
+  // FF * 1 = FF and FF * 0 = 0
+  if (a <= 1 || b <= 1) {
+    return a * b;
+  }
+
+  int res = lookupL(a) + lookupL(b);
+  res = res > 0xFF ? res - 0xFF : res;
+  return lookupE((byte_t) res);
 }
 
 

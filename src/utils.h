@@ -8,6 +8,11 @@
 
 typedef __uint8_t byte_t;
 
+typedef struct coord {
+  int x;
+  int y;
+} coord_t;
+
 extern byte_t sBox[256];
 extern byte_t invSBox[256];
 
@@ -20,5 +25,7 @@ void shiftRight(byte_t **, int);
 void shiftLeft(byte_t **, int);
 
 void arrangeMatrix(byte_t **);
+
+byte_t galoisMultiply(byte_t, byte_t);
 
 #endif //AESTUT_UTILS_H

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utils.h"
 
 void addRoundKey(byte_t **state, byte_t *expKey) {
@@ -34,6 +35,14 @@ void decryptShiftRow(byte_t **state) {
   arrangeMatrix(state);
 }
 
+void encryptMixColumn(byte_t **state) {
+  byte_t *temp = malloc(sizeof(byte_t) * BLOCK_SIZE);
+  memcpy(temp, state, sizeof(temp));
+
+  for (int i = 0; i < BLOCK_SIZE; ++i) {
+    
+  }
+}
 
 
 int main() {
