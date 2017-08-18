@@ -52,6 +52,8 @@ void mixColumn(byte_t **state, byte_t *matrix) {
       (*state)[i * ROW_LENGTH + j] = res;
     }
   }
+
+  free(temp);
 }
 
 void encryptMixColumn(byte_t **state) {

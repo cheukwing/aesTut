@@ -94,6 +94,19 @@ byte_t lTable[256] = {
     0x67, 0x4A, 0xED, 0xDE, 0xC5, 0x31, 0xFE, 0x18, 0x0D, 0x63, 0x8C, 0x80, 0xC0, 0xF7, 0x70, 0x07
 };
 
+// PRE: 0 <= index < 4
+byte_t getByteFromWord(word_t word, int index) {
+  word_t mask = (word_t) 0xFF << (BITS_IN_BYTE * index);
+  word = (word & mask) >> (BITS_IN_BYTE * index);
+  return (byte_t) word;
+}
+
+void addWordToByteArray(byte_t **bytes, word_t word) {
+  for (int i = 0; i < BYTES_IN_WORD; ++i) {
+    (*bytes)[i] = getByteFromWord(word, i);
+  }
+}
+
 coord_t getCoord(byte_t byte) {
   coord_t coord = {byte & 0xF, byte >> 4};
   return coord;
