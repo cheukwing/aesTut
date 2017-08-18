@@ -34,6 +34,8 @@ void decryptShiftRow(byte_t **state) {
   arrangeMatrix(state);
 }
 
+
+
 int main() {
   return 0;
 }
