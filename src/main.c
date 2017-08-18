@@ -35,13 +35,31 @@ void decryptShiftRow(byte_t **state) {
   arrangeMatrix(state);
 }
 
-void encryptMixColumn(byte_t **state) {
+// generic function
+void mixColumn(byte_t **state, byte_t *matrix) {
   byte_t *temp = malloc(sizeof(byte_t) * BLOCK_SIZE);
   memcpy(temp, state, sizeof(temp));
 
-  for (int i = 0; i < BLOCK_SIZE; ++i) {
-    
+  // iterate through row
+  for (int i = 0; i < ROW_LENGTH; ++i) {
+    // iterate through columns
+    for (int j = 0; j < ROW_LENGTH; ++j) {
+      // perform the mix column
+      byte_t res = 0;
+      for (int k = 0; k < ROW_LENGTH; ++k) {
+        res ^= galoisMultiply(temp[k * ROW_LENGTH + j], matrix[i * ROW_LENGTH + k]);
+      }
+      (*state)[i * ROW_LENGTH + j] = res;
+    }
   }
+}
+
+void encryptMixColumn(byte_t **state) {
+  mixColumn(state, mixColMatrix);
+}
+
+void decryptMixColumn(byte_t **state) {
+  mixColumn(state, invMixColMatrix);
 }
 
 

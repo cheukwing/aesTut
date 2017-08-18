@@ -15,6 +15,8 @@ typedef struct coord {
 
 extern byte_t sBox[256];
 extern byte_t invSBox[256];
+extern byte_t mixColMatrix[16];
+extern byte_t invMixColMatrix[16];
 
 byte_t encryptByte(byte_t);
 
