@@ -64,7 +64,37 @@ void decryptMixColumn(byte_t **state) {
   mixColumn(state, invMixColMatrix);
 }
 
+byte_t *encrypt(byte_t *state, byte_t *expKey) {
+  addRoundKey(&state, expKey);
+  for (int i = 0; i < 9; i++) {
+    encryptByteSub(&state);
+    encryptShiftRow(&state);
+    encryptMixColumn(&state);
+    addRoundKey(&state, expKey + ((i + 1) * KEY_SIZE));
+  }
+  encryptByteSub(&state);
+  encryptShiftRow(&state);
+  addRoundKey(&state, expKey + (10 * KEY_SIZE));
+  return state;
+}
+
+byte_t *decrypt(byte_t *state, byte_t *expKey) {
+  addRoundKey(&state, expKey + (10 * KEY_SIZE));
+  for (int i = 9; i > 0; i--) {
+    decryptShiftRow(&state);
+    decryptByteSub(&state);
+    addRoundKey(&state, expKey + (i * KEY_SIZE));
+    decryptMixColumn(&state);
+  }
+  decryptShiftRow(&state);
+  decryptByteSub(&state);
+  addRoundKey(&state, expKey);
+  return state;
+}
+
 
 int main() {
-  return 0;
+  byte_t state[16] = "Hello everybody";
+
+
 }

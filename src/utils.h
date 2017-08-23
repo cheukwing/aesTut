@@ -36,4 +36,6 @@ void arrangeMatrix(byte_t **);
 
 byte_t galoisMultiply(byte_t, byte_t);
 
+void addWordToByteArray(byte_t**, word_t);
+
 #endif //AESTUT_UTILS_H

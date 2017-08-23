@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #include "utils.h"
 
 // thank you wikipedia
@@ -128,6 +129,10 @@ byte_t decryptByte(byte_t byte) {
 // seems more like a left shift, but tutorial describes it as right?
 void shiftRight(byte_t **row, int n) {
   byte_t *temp = malloc(sizeof(byte_t) * ROW_LENGTH);
+  if (temp == NULL) {
+    perror("malloc error in shiftRight");
+    exit(EXIT_FAILURE);
+  }
   memcpy(temp, row, sizeof(temp));
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
@@ -140,6 +145,10 @@ void shiftRight(byte_t **row, int n) {
 // seems more like a right shift, but tutorial describes it as left?
 void shiftLeft(byte_t **row, int n) {
   byte_t *temp = malloc(sizeof(byte_t) * ROW_LENGTH);
+  if (temp == NULL) {
+    perror("malloc error in shiftLeft");
+    exit(EXIT_FAILURE);
+  }
   memcpy(temp, row, sizeof(temp));
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
@@ -151,6 +160,10 @@ void shiftLeft(byte_t **row, int n) {
 
 void arrangeMatrix(byte_t **state) {
   byte_t *temp = malloc(sizeof(byte_t) * BLOCK_SIZE);
+  if (temp == NULL) {
+    perror("malloc error in arrangeMatrix");
+    exit(EXIT_FAILURE);
+  }
   memcpy(temp, state, sizeof(temp));
 
   for (int i = 0; i < ROW_LENGTH; ++i) {

@@ -2,6 +2,10 @@
 #include "key.h"
 #include "utils.h"
 
+#define EXPANDED_KEY_LENGTH 176
+#define EXPANSION_REPEAT_ROUNDS 10
+#define EXPANSION_ROUNDS 44
+
 word_t rotWord(word_t word) {
   byte_t fstByte = getByteFromWord(word, 0);
   word >>= BITS_IN_BYTE;
@@ -37,23 +41,41 @@ word_t rcon(int round) {
     case 13: return 0x4D000000;
     case 14: return 0x9A000000;
     default:
-      printf("ERROR: rcon\n");
+      perror("switch error in rcon");
       exit(EXIT_FAILURE);
   }
 }
 
-word_t wordFromOffset(int offset, byte_t **bytes) {
+word_t wordFromOffset(int offset, byte_t *bytes) {
   word_t res = 0;
   for (int i = 0; i < BYTES_IN_WORD; ++i) {
-    res += (*bytes)[offset + i] << (BITS_IN_BYTE * i);
+    res += bytes[offset + i] << (BITS_IN_BYTE * i);
   }
   return res;
 }
 
-word_t ek(int offset, byte_t **eKey) {
+word_t ek(int offset, byte_t *eKey) {
   return wordFromOffset(offset, eKey);
 }
 
-word_t k(int offset, byte_t **key) {
+word_t k(int offset, byte_t *key) {
   return wordFromOffset(offset, key);
+}
+
+void getExpandedKey(byte_t **expandedKey, byte_t *key) {
+  for (int round = 0; round < EXPANSION_ROUNDS; ++round) {
+    int offset = round * BYTES_IN_WORD;
+    if (round < 4) {
+      addWordToByteArray(expandedKey + offset, k(round * BYTES_IN_WORD, key));
+    } else if (round % 4 == 0) {
+      addWordToByteArray(expandedKey + offset,
+                         rotWord(ek((round - 1) * 4, *expandedKey))
+                         ^ rcon((round / 4) - 1)
+                         ^ ek((round - 4) * 4, *expandedKey));
+    } else {
+      addWordToByteArray(expandedKey + offset,
+                         ek((round - 1) * 4, *expandedKey)
+                         ^ ek((round - 4) * 4, *expandedKey));
+    }
+  }
 }
