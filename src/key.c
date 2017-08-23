@@ -62,14 +62,13 @@ word_t k(int offset, byte_t *key) {
 }
 
 byte_t *getExpandedKey(byte_t *key) {
-  byte_t *expandedKey = calloc(sizeof(byte_t), EXPANDED_KEY_LENGTH);
+  byte_t *expandedKey = malloc(sizeof(byte_t) * EXPANDED_KEY_LENGTH);
   if (expandedKey == NULL) {
     perror("malloc error in getExpandedKey");
     exit(EXIT_FAILURE);
   }
   byte_t *offset = expandedKey;
   for (int round = 0; round < EXPANSION_ROUNDS; ++round) {
-    //int offset = round * BYTES_IN_WORD;
     if (round < 4) {
       addWordToByteArray(offset, k(round * BYTES_IN_WORD, key));
     } else if (round % 4 == 0) {

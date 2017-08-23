@@ -149,7 +149,7 @@ void shiftLeft(byte_t *row, int n) {
     perror("malloc error in shiftLeft");
     exit(EXIT_FAILURE);
   }
-  memcpy(temp, row, sizeof(temp));
+  memcpy(temp, row, sizeof(byte_t) * ROW_LENGTH);
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
     row[i] = temp[(i - n) % ROW_LENGTH];
@@ -164,7 +164,7 @@ void arrangeMatrix(byte_t *state) {
     perror("malloc error in arrangeMatrix");
     exit(EXIT_FAILURE);
   }
-  memcpy(temp, state, sizeof(temp));
+  memcpy(temp, state, sizeof(byte_t) * ROW_LENGTH);
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
     for (int j = 0; j < ROW_LENGTH; ++j) {
