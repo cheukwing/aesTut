@@ -73,14 +73,14 @@ byte_t *getExpandedKey(byte_t *key) {
   for (int round = 0; round < EXPANSION_ROUNDS; ++round) {
     //int offset = round * BYTES_IN_WORD;
     if (round < 4) {
-      addWordToByteArray(&offset, k(round * BYTES_IN_WORD, key));
+      addWordToByteArray(offset, k(round * BYTES_IN_WORD, key));
     } else if (round % 4 == 0) {
-      addWordToByteArray(&offset,
+      addWordToByteArray(offset,
                          rotWord(ek((round - 1) * 4, expandedKey))
                          ^ rcon((round / 4) - 1)
                          ^ ek((round - 4) * 4, expandedKey));
     } else {
-      addWordToByteArray(&offset,
+      addWordToByteArray(offset,
                          ek((round - 1) * 4, expandedKey)
                          ^ ek((round - 4) * 4, expandedKey));
     }

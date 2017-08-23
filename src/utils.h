@@ -28,16 +28,16 @@ byte_t encryptByte(byte_t);
 
 byte_t decryptByte(byte_t);
 
-void shiftRight(byte_t **, int);
+void shiftRight(byte_t *, int);
 
-void shiftLeft(byte_t **, int);
+void shiftLeft(byte_t *, int);
 
-void arrangeMatrix(byte_t **);
+void arrangeMatrix(byte_t *);
 
 byte_t galoisMultiply(byte_t, byte_t);
 
-void addWordToByteArray(byte_t**, word_t);
+void addWordToByteArray(byte_t *, word_t);
 
-void printBytes(byte_t*, int);
+void printBytes(byte_t *, int);
 
 #endif //AESTUT_UTILS_H
