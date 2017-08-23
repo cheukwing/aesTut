@@ -117,20 +117,3 @@ int main() {
 
   free(expKey);
 }
-
-
-void foobar(int *nums) {
-  for (int i = 0; i < 3; ++i) {
-    nums[i] = 5;
-  }
-}
-
-
-int pmain() {
-  int blah[] = {1, 2, 3};
-  foobar(blah);
-  for (int i = 0; i < 3; i++) {
-    printf("%d ", blah[i]);
-  }
-  printf("\n");
-}

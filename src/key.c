@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include "key.h"
-#include "utils.h"
 
 #define EXPANDED_KEY_LENGTH 176
-#define EXPANSION_REPEAT_ROUNDS 10
 #define EXPANSION_ROUNDS 44
 
 word_t rotWord(word_t word) {
@@ -76,9 +74,9 @@ byte_t *getExpandedKey(byte_t *key) {
       addWordToByteArray(offset, k(round * BYTES_IN_WORD, key));
     } else if (round % 4 == 0) {
       addWordToByteArray(offset,
-                         rotWord(ek((round - 1) * 4, expandedKey))
-                         ^ rcon((round / 4) - 1)
-                         ^ ek((round - 4) * 4, expandedKey));
+                         subWord(rotWord(ek((round - 1) * 4, expandedKey)))
+                             ^ rcon((round / 4) - 1)
+                             ^ ek((round - 4) * 4, expandedKey));
     } else {
       addWordToByteArray(offset,
                          ek((round - 1) * 4, expandedKey)
