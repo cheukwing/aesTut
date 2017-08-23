@@ -24,7 +24,7 @@ word_t subWord(word_t word) {
 
 // assume keysize always 16
 word_t rcon(int round) {
-  switch ((round / (KEY_SIZE /BYTES_IN_WORD)) - 1) {
+  switch (round) {
     case 0: return 0x01000000;
     case 1: return 0x02000000;
     case 2: return 0x04000000;
@@ -41,6 +41,7 @@ word_t rcon(int round) {
     case 13: return 0x4D000000;
     case 14: return 0x9A000000;
     default:
+      printf("%d\n", round);
       perror("switch error in rcon");
       exit(EXIT_FAILURE);
   }
@@ -62,20 +63,28 @@ word_t k(int offset, byte_t *key) {
   return wordFromOffset(offset, key);
 }
 
-void getExpandedKey(byte_t **expandedKey, byte_t *key) {
-  for (int round = 0; round < EXPANSION_ROUNDS; ++round) {
-    int offset = round * BYTES_IN_WORD;
-    if (round < 4) {
-      addWordToByteArray(expandedKey + offset, k(round * BYTES_IN_WORD, key));
-    } else if (round % 4 == 0) {
-      addWordToByteArray(expandedKey + offset,
-                         rotWord(ek((round - 1) * 4, *expandedKey))
-                         ^ rcon((round / 4) - 1)
-                         ^ ek((round - 4) * 4, *expandedKey));
-    } else {
-      addWordToByteArray(expandedKey + offset,
-                         ek((round - 1) * 4, *expandedKey)
-                         ^ ek((round - 4) * 4, *expandedKey));
-    }
+byte_t *getExpandedKey(byte_t *key) {
+  byte_t *expandedKey = calloc(sizeof(byte_t), EXPANDED_KEY_LENGTH);
+  if (expandedKey == NULL) {
+    perror("malloc error in getExpandedKey");
+    exit(EXIT_FAILURE);
   }
+  byte_t *offset = expandedKey;
+  for (int round = 0; round < EXPANSION_ROUNDS; ++round) {
+    //int offset = round * BYTES_IN_WORD;
+    if (round < 4) {
+      addWordToByteArray(&offset, k(round * BYTES_IN_WORD, key));
+    } else if (round % 4 == 0) {
+      addWordToByteArray(&offset,
+                         rotWord(ek((round - 1) * 4, expandedKey))
+                         ^ rcon((round / 4) - 1)
+                         ^ ek((round - 4) * 4, expandedKey));
+    } else {
+      addWordToByteArray(&offset,
+                         ek((round - 1) * 4, expandedKey)
+                         ^ ek((round - 4) * 4, expandedKey));
+    }
+    offset += BYTES_IN_WORD;
+  }
+  return expandedKey;
 }

@@ -194,4 +194,11 @@ byte_t galoisMultiply(byte_t a, byte_t b) {
   return lookupE((byte_t) res);
 }
 
+void printBytes(byte_t *byte, int size) {
+  for (int i = 0; i < size; i++) {
+    printf("%d ", byte[i]);
+  }
+  printf("\n");
+}
+
 

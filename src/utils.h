@@ -38,4 +38,6 @@ byte_t galoisMultiply(byte_t, byte_t);
 
 void addWordToByteArray(byte_t**, word_t);
 
+void printBytes(byte_t*, int);
+
 #endif //AESTUT_UTILS_H

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
+#include "key.h"
 
 void addRoundKey(byte_t **state, byte_t *expKey) {
   for (int i = 0; i < BLOCK_SIZE; ++i) {
@@ -64,37 +65,41 @@ void decryptMixColumn(byte_t **state) {
   mixColumn(state, invMixColMatrix);
 }
 
-byte_t *encrypt(byte_t *state, byte_t *expKey) {
-  addRoundKey(&state, expKey);
+void encrypt(byte_t **state, byte_t *expKey) {
+  addRoundKey(state, expKey);
   for (int i = 0; i < 9; i++) {
-    encryptByteSub(&state);
-    encryptShiftRow(&state);
-    encryptMixColumn(&state);
-    addRoundKey(&state, expKey + ((i + 1) * KEY_SIZE));
+    encryptByteSub(state);
+    encryptShiftRow(state);
+    encryptMixColumn(state);
+    addRoundKey(state, expKey + ((i + 1) * KEY_SIZE));
   }
-  encryptByteSub(&state);
-  encryptShiftRow(&state);
-  addRoundKey(&state, expKey + (10 * KEY_SIZE));
-  return state;
+  encryptByteSub(state);
+  encryptShiftRow(state);
+  addRoundKey(state, expKey + (10 * KEY_SIZE));
 }
 
-byte_t *decrypt(byte_t *state, byte_t *expKey) {
-  addRoundKey(&state, expKey + (10 * KEY_SIZE));
+void decrypt(byte_t **state, byte_t *expKey) {
+  addRoundKey(state, expKey + (10 * KEY_SIZE));
   for (int i = 9; i > 0; i--) {
-    decryptShiftRow(&state);
-    decryptByteSub(&state);
-    addRoundKey(&state, expKey + (i * KEY_SIZE));
-    decryptMixColumn(&state);
+    decryptShiftRow(state);
+    decryptByteSub(state);
+    addRoundKey(state, expKey + (i * KEY_SIZE));
+    decryptMixColumn(state);
   }
-  decryptShiftRow(&state);
-  decryptByteSub(&state);
-  addRoundKey(&state, expKey);
-  return state;
+  decryptShiftRow(state);
+  decryptByteSub(state);
+  addRoundKey(state, expKey);
 }
 
 
 int main() {
-  byte_t state[16] = "Hello everybody";
+  byte_t key[17] = "abcabcabcabcabc\0";
+  byte_t state[17] = "Hello everybody\0";
+  byte_t *stateP = state;
 
-
+  printf("Expanding key...\n");
+  byte_t *expKey = getExpandedKey(key);
+  printf("Encrypting...\n");
+  encrypt(&stateP, expKey);
+  printBytes(stateP, 16);
 }
