@@ -10,6 +10,8 @@
 #define KEY_SIZE 16
 #define TABLE_SIZE 16
 
+#define MOD(x, n) (x % n + n) % n
+
 typedef __uint8_t byte_t;
 typedef __uint32_t word_t;
 

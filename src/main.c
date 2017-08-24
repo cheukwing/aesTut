@@ -31,14 +31,15 @@ void encryptShiftRow(byte_t *state) {
 }
 
 void decryptShiftRow(byte_t *state) {
+  arrangeMatrix(state);
   for (int i = 0; i < ROW_LENGTH; ++i) {
     shiftLeft(state, i);
     state += ROW_LENGTH;
   }
-  arrangeMatrix(state - (ROW_LENGTH * ROW_LENGTH));
+  //arrangeMatrix(state - (ROW_LENGTH * ROW_LENGTH));
 }
 
-// generic function
+// generic mix column function
 void mixColumn(byte_t *state, byte_t *matrix) {
   byte_t *temp = malloc(sizeof(byte_t) * BLOCK_SIZE);
   memcpy(temp, state, sizeof(byte_t) * BLOCK_SIZE);
@@ -99,6 +100,13 @@ void decrypt(byte_t *state, byte_t *expKey) {
 }
 
 int main() {
+  byte_t meme[] = {0x04, 0, 0, 0,
+                   0x66, 0, 0, 0,
+                   0x81, 0, 0, 0,
+                   0xe5, 0, 0, 0};
+  mixColumn(meme, invMixColMatrix);
+  printBytes(meme, 16);
+
 }
 
 

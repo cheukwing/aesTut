@@ -46,7 +46,7 @@ byte_t mixColMatrix[16] = {
     0x02, 0x03, 0x01, 0x01,
     0x01, 0x02, 0x03, 0x01,
     0x01, 0x01, 0x02, 0x03,
-    0x03, 0x01, 0x01, 0x03
+    0x03, 0x01, 0x01, 0x02
 };
 
 byte_t invMixColMatrix[16] = {
@@ -133,10 +133,10 @@ void shiftRight(byte_t *row, int n) {
     perror("malloc error in shiftRight");
     exit(EXIT_FAILURE);
   }
-  memcpy(temp, row, sizeof(temp));
+  memcpy(temp, row, sizeof(byte_t) * ROW_LENGTH);
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
-    row[i] = temp[(i + n) % ROW_LENGTH];
+    row[i] = temp[MOD(i + n, ROW_LENGTH)];
   }
 
   free(temp);
@@ -152,7 +152,7 @@ void shiftLeft(byte_t *row, int n) {
   memcpy(temp, row, sizeof(byte_t) * ROW_LENGTH);
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
-    row[i] = temp[(i - n) % ROW_LENGTH];
+    row[i] = temp[MOD(i - n, ROW_LENGTH)];
   }
 
   free(temp);
