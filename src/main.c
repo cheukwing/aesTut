@@ -101,20 +101,31 @@ void decrypt(byte_t *state, byte_t *expKey) {
 int main() {
   byte_t key[] = "This Is A Secret";
   byte_t state[] = "Hello Everybody!";
+
+  printf("The original message is: ");
   printBytes(state, 16);
+  printf("This will be decrypted using the key: ");
+  printBytes(key, 16);
+
+  printf("\n");
 
   printf("Expanding key...\n");
   byte_t *expKey = getExpandedKey(key);
+  printf("Expanded key: ");
   printBytes(expKey, 176);
+
+  printf("\n");
 
   printf("Encrypting...\n");
   encrypt(state, expKey);
-  printf("Encrypted!\n");
+  printf("The encrypted message is: ");
   printBytes(state, 16);
+
+  printf("\n");
 
   printf("Decrypting...\n");
   decrypt(state, expKey);
-  printf("Decrypted!\n");
+  printf("The decrypted message is: ");
   printBytes(state, 16);
 
   free(expKey);
