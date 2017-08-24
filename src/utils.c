@@ -115,7 +115,7 @@ coord_t getCoord(byte_t byte) {
 
 byte_t lookupTable(byte_t byte, byte_t table[]) {
   coord_t coord = getCoord(byte);
-  return table[coord.y * 0xF + coord.x];
+  return table[coord.y * TABLE_SIZE + coord.x];
 }
 
 byte_t encryptByte(byte_t byte) {
@@ -164,7 +164,7 @@ void arrangeMatrix(byte_t *state) {
     perror("malloc error in arrangeMatrix");
     exit(EXIT_FAILURE);
   }
-  memcpy(temp, state, sizeof(byte_t) * ROW_LENGTH);
+  memcpy(temp, state, sizeof(byte_t) * BLOCK_SIZE);
 
   for (int i = 0; i < ROW_LENGTH; ++i) {
     for (int j = 0; j < ROW_LENGTH; ++j) {
@@ -196,7 +196,7 @@ byte_t galoisMultiply(byte_t a, byte_t b) {
 
 void printBytes(byte_t *byte, int size) {
   for (int i = 0; i < size; i++) {
-    printf("%d ", byte[i]);
+    printf("%x ", byte[i]);
   }
   printf("\n");
 }

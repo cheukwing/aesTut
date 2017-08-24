@@ -8,6 +8,7 @@
 #define BLOCK_SIZE 16
 #define ROW_LENGTH 4
 #define KEY_SIZE 16
+#define TABLE_SIZE 16
 
 typedef __uint8_t byte_t;
 typedef __uint32_t word_t;

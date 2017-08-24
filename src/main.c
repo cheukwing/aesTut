@@ -98,10 +98,13 @@ void decrypt(byte_t *state, byte_t *expKey) {
   addRoundKey(state, expKey);
 }
 
-
 int main() {
-  byte_t key[] = "ThisIsASecret!!!";
-  byte_t state[] = "Hello everybody!";
+}
+
+
+int gmain() {
+  byte_t key[] = "1234567890123456";
+  byte_t state[] = "1234567890123456";
   printBytes(state, 16);
 
   printf("Expanding key...\n");
