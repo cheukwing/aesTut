@@ -31,12 +31,11 @@ void encryptShiftRow(byte_t *state) {
 }
 
 void decryptShiftRow(byte_t *state) {
-  arrangeMatrix(state);
   for (int i = 0; i < ROW_LENGTH; ++i) {
     shiftLeft(state, i);
     state += ROW_LENGTH;
   }
-  //arrangeMatrix(state - (ROW_LENGTH * ROW_LENGTH));
+  arrangeMatrix(state - (ROW_LENGTH * ROW_LENGTH));
 }
 
 // generic mix column function
@@ -100,19 +99,8 @@ void decrypt(byte_t *state, byte_t *expKey) {
 }
 
 int main() {
-  byte_t meme[] = {0x04, 0, 0, 0,
-                   0x66, 0, 0, 0,
-                   0x81, 0, 0, 0,
-                   0xe5, 0, 0, 0};
-  mixColumn(meme, invMixColMatrix);
-  printBytes(meme, 16);
-
-}
-
-
-int gmain() {
-  byte_t key[] = "1234567890123456";
-  byte_t state[] = "1234567890123456";
+  byte_t key[] = "This Is A Secret";
+  byte_t state[] = "Hello Everybody!";
   printBytes(state, 16);
 
   printf("Expanding key...\n");

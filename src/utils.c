@@ -196,7 +196,7 @@ byte_t galoisMultiply(byte_t a, byte_t b) {
 
 void printBytes(byte_t *byte, int size) {
   for (int i = 0; i < size; i++) {
-    printf("%x ", byte[i]);
+    printf("%c ", byte[i]);
   }
   printf("\n");
 }
